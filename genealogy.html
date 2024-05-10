@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Genealogy Software</title>
+    <style>
+      /* Add CSS styles for the tree structure */
+      .tree {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .node {
+        display: inline-block;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tree" id="ancestorTree">
+      <!-- Ancestor Tree will be rendered here -->
+    </div>
+
+    <script>
+      // Fetch family tree data from server
+      fetch("/family-tree")
+        .then((response) => response.json())
+        .then((data) => {
+          renderAncestorTree(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching family tree data:", error);
+          console.log("Response:", error.response); // Log the full response object
+        });
+
+      // Function to render the ancestor tree
+      function renderAncestorTree(treeData) {
+        const ancestorTree = document.getElementById("ancestorTree");
+
+        // Render each person in the tree
+        treeData.forEach((person) => {
+          const node = document.createElement("div");
+          node.classList.add("node");
+          node.textContent = `${person.name} (${person.sex}) - ${person.dob}`;
+          ancestorTree.appendChild(node);
+
+          // Check if the person has parents and render them recursively
+          if (person.fatherId || person.motherId) {
+            const parentContainer = document.createElement("div");
+            parentContainer.classList.add("parents");
+            node.appendChild(parentContainer);
+
+            if (person.motherId) {
+              const mother = treeData.find((p) => p.id === person.motherId);
+              if (mother) {
+                const motherNode = document.createElement("div");
+                motherNode.textContent = `Mother: ${mother.name}`;
+                parentContainer.appendChild(motherNode);
+              }
+            }
+
+            if (person.fatherId) {
+              const father = treeData.find((p) => p.id === person.fatherId);
+              if (father) {
+                const fatherNode = document.createElement("div");
+                fatherNode.textContent = `Father: ${father.name}`;
+                parentContainer.appendChild(fatherNode);
+              }
+            }
+          }
+
+          // Check if the person has daughters and render them
+          if (person.daughterId) {
+            const daughter = treeData.find((p) => p.id === person.daughterId);
+            if (daughter) {
+              const daughterNode = document.createElement("div");
+              daughterNode.textContent = `Daughter: ${daughter.name}`;
+              ancestorTree.appendChild(daughterNode);
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

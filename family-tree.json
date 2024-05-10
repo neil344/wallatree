@@ -1,0 +1,19 @@
+[
+  {
+    "id": "3ffade65-4e9f-460d-9d99-de27e97f0965",
+    "name": "Edward Doe",
+    "sex": "male",
+    "dob": "1990-01-01",
+    "fatherId": null,
+    "motherId": null,
+    "daughterId": "629a5c8c-73f8-43e4-ab76-bec3b9fc0775"
+  },
+  {
+    "id": "629a5c8c-73f8-43e4-ab76-bec3b9fc0775",
+    "name": "Mary Doe",
+    "sex": "female",
+    "dob": "2000-01-01",
+    "fatherId": "3ffade65-4e9f-460d-9d99-de27e97f0965",
+    "motherId": null
+  }
+]
